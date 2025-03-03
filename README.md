@@ -1,1 +1,1 @@
-# scalf-lang
+# scalcc
