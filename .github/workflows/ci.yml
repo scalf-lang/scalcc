@@ -1,0 +1,54 @@
+name: SCALF Compiler CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  LLVM_VERSION: 14  # Adjust based on your LLVM version
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang-$LLVM_VERSION \
+          llvm-$LLVM_VERSION \
+          llvm-$LLVM_VERSION-dev \
+          lld-$LLVM_VERSION \
+          flex \
+          bison \
+          cmake \
+          ninja-build \
+          build-essential \
+          libz-dev
+
+    - name: Set LLVM environment variables
+      run: |
+        echo "LLVM_DIR=/usr/lib/llvm-$LLVM_VERSION/lib/cmake/llvm" >> $GITHUB_ENV
+
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: |
+        cd build
+        ninja
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure

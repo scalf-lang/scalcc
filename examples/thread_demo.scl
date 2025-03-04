@@ -1,0 +1,29 @@
+? examples/thread_demo.scl
+? SCALF Threading Demo
+
+? Include standard library for system calls
+include > "stdlib"
+
+? Function to run in a thread
+func:ThreadFunc(:arg) {
+    |>syscall(1, "Thread running with arg: " + arg);
+}
+
+? Function to demonstrate threading
+func:ThreadDemo() {
+    ? Create a new thread
+    threadHandle:th >> &thread(ThreadFunc, "Hello from thread!");
+
+    ? Wait for the thread to finish
+    &join(th);
+
+    |>syscall(1, "Thread finished.");
+}
+
+? Main function
+func:Main() {
+    ThreadDemo();
+}
+
+? Entry point
+Main();

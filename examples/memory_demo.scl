@@ -1,0 +1,30 @@
+? examples/memory_demo.scl
+? SCALF Memory Management Demo
+
+? Include standard library for system calls
+include > "stdlib"
+
+? Function to demonstrate memory allocation and freeing
+func:MemoryDemo() {
+    ? Allocate 1024 bytes (1KB) of memory
+    pointer:ptr >> ^(1024);
+
+    ? Write a message to the allocated memory
+    ptr[0] >> 'H';
+    ptr[1] >> 'i';
+    ptr[2] >> '\0';
+
+    ? Print the message
+    |>syscall(1, ptr);
+
+    ? Free the allocated memory
+    ~!(ptr);
+}
+
+? Main function
+func:Main() {
+    MemoryDemo();
+}
+
+? Entry point
+Main();

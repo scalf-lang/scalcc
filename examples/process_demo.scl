@@ -1,0 +1,25 @@
+? examples/process_demo.scl
+? SCALF Process Management Demo
+
+? Include standard library for system calls
+include > "stdlib"
+
+? Function to demonstrate process management
+func:ProcessDemo() {
+    ? Create a new process (e.g., run "ls" command)
+    processHandle:ph >> &create("ls", {"-l", "/"});
+
+    ? Wait for the process to complete
+    int:exitCode >> &wait(ph);
+
+    ? Print the exit code
+    |>syscall(1, "Process exited with code: " + exitCode);
+}
+
+? Main function
+func:Main() {
+    ProcessDemo();
+}
+
+? Entry point
+Main();
