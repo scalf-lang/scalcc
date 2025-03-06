@@ -40,6 +40,7 @@ Token Parser::peekNextToken() {
 // Parse a function definition
 std::unique_ptr<StmtNode> Parser::parseFunctionDefinition() {
     eat(TokenType::TOKEN_KEYWORD); // func
+    eat(TokenType::TOKEN_OPERATOR); // :
     eat(TokenType::TOKEN_IDENTIFIER); // Function name
     eat(TokenType::TOKEN_SYMBOL); // (
     // Parse parameters

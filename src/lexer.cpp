@@ -18,7 +18,7 @@ Token Lexer::getNextToken() {
     char currentChar = peek();
 
     // Handle identifiers and keywords
-    if (isalpha(currentChar) {
+    if (isalpha(currentChar)) {
         return readIdentifier();
     }
 
