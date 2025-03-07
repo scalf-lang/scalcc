@@ -1,8 +1,8 @@
 ? examples/thread_demo.scl
 ? SCALF Threading Demo
 
-? Include standard library for system calls
-include > "stdlib"
+? Include standard library for thread type
+include > "thread"
 
 ? Function to run in a thread
 func:ThreadFunc(:arg) {

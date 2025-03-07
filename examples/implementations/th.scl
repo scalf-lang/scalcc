@@ -1,0 +1,45 @@
+? th.scl
+? Defines the `th` class for thread handling in SCALF
+
+? Include standard library for system calls
+include > "stdlib"
+include > "handle"
+
+? ThreadHandle class definition
+class:th {
+    ? Private member: thread handle
+    private threadHandle:handle >> null;
+
+    ? Constructor: Creates a new thread
+    func:Constructor(func:entryPoint, :args) {
+        handle >> &thread(entryPoint, args);
+    }
+
+    ? Destructor: Kills the thread if it's still running
+    func:Destructor() {
+        if (handle != null) {
+            &killThread(handle);
+        }
+    }
+
+    ? Method: Wait for the thread to complete
+    func:Join() {
+        if (handle != null) {
+            &join(handle);
+            handle >> null; ? Reset handle after thread completes
+        }
+    }
+
+    ? Method: Kill the thread
+    func:Kill() {
+        if (handle != null) {
+            &killThread(handle);
+            handle >> null; ? Reset handle after killing the thread
+        }
+    }
+
+    ? Method: Check if the thread is running
+    func:IsRunning() -> bool {
+        return handle != null;
+    }
+}

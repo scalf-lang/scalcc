@@ -12,13 +12,13 @@ Token Lexer::getNextToken() {
     skipComment();
 
     if (position >= source.length()) {
-        return {TokenType::TOKEN_EOF, "", line, column};
+        return Token(TokenType::TOKEN_EOF, "", line, column);
     }
 
     char currentChar = peek();
 
     // Handle identifiers and keywords
-    if (isalpha(currentChar)) {
+    if (isalpha(currentChar) {
         return readIdentifier();
     }
 
@@ -38,107 +38,101 @@ Token Lexer::getNextToken() {
     }
 
     // Unknown token
-    advance();
-    return {TokenType::TOKEN_UNKNOWN, std::string(1, currentChar), line, column};
+    return Token(TokenType::TOKEN_UNKNOWN, std::string(1, currentChar), line, column);
 }
 
-// Get the current position in the source code
-std::pair<int, int> Lexer::getPosition() const {
-    return {line, column};
-}
-
-// Peek at the current character without advancing
+// Helper: Peek at the current character
 char Lexer::peek() const {
-    return position < source.length() ? source[position] : '\0';
+    return source[position];
 }
 
-// Advance to the next character
+// Helper: Advance to the next character
 char Lexer::advance() {
-    char currentChar = peek();
+    char currentChar = source[position++];
     if (currentChar == '\n') {
         line++;
         column = 1;
     } else {
         column++;
     }
-    position++;
     return currentChar;
 }
 
-// Skip whitespace characters
+// Helper: Skip whitespace
 void Lexer::skipWhitespace() {
-    while (isspace(peek())) {
+    while (position < source.length() && isspace(peek())) {
         advance();
     }
 }
 
-// Skip comments
+// Helper: Skip comments
 void Lexer::skipComment() {
-    if (peek() == '/' && position + 1 < source.length() && source[position + 1] == '/') {
-        // Skip single-line comment
-        while (peek() != '\n' && peek() != '\0') {
-            advance();
+    if (peek() == '?') {
+        if (position + 1 < source.length() && source[position + 1] == '/') {
+            // Multiline comment
+            while (position < source.length() && !(peek() == '/' && source[position + 1] == '?')) {
+                advance();
+            }
+            advance(); // Skip '/'
+            advance(); // Skip '?'
+        } else {
+            // Single-line comment
+            while (position < source.length() && peek() != '\n') {
+                advance();
+            }
         }
     }
 }
 
-// Read an identifier or keyword
+// Helper: Read an identifier or keyword
 Token Lexer::readIdentifier() {
-    int startLine = line;
-    int startColumn = column;
     std::string value;
-
-    while (isalnum(peek()) || peek() == '_') {
+    while (position < source.length() && (isalnum(peek()) || peek() == '_')) {
         value += advance();
     }
 
-    // Check if the identifier is a keyword
-    if (value == "func" || value == "class" || value == "glob" || value == "include") {
-        return {TokenType::TOKEN_KEYWORD, value, startLine, startColumn};
+    // Check if it's a keyword
+    if (value == "func" || value == "class" || value == "struct" || value == "glob" || value == "include") {
+        return Token(TokenType::TOKEN_KEYWORD, value, line, column);
     }
 
-    return {TokenType::TOKEN_IDENTIFIER, value, startLine, startColumn};
+    return Token(TokenType::TOKEN_IDENTIFIER, value, line, column);
 }
 
-// Read a number
+// Helper: Read a number
 Token Lexer::readNumber() {
-    int startLine = line;
-    int startColumn = column;
     std::string value;
-
-    while (isdigit(peek())) {
+    while (position < source.length() && isdigit(peek())) {
         value += advance();
     }
-
-    return {TokenType::TOKEN_NUMBER, value, startLine, startColumn};
+    return Token(TokenType::TOKEN_NUMBER, value, line, column);
 }
 
-// Read a string
+// Helper: Read a string
 Token Lexer::readString() {
-    int startLine = line;
-    int startColumn = column;
     std::string value;
-
-    advance(); // Skip the opening quote
-    while (peek() != '"' && peek() != '\0') {
+    advance(); // Skip opening quote
+    while (position < source.length() && peek() != '"') {
         value += advance();
     }
-    advance(); // Skip the closing quote
-
-    return {TokenType::TOKEN_STRING, value, startLine, startColumn};
+    advance(); // Skip closing quote
+    return Token(TokenType::TOKEN_STRING, value, line, column);
 }
 
-// Read an operator or symbol
+// Helper: Read an operator or symbol
 Token Lexer::readOperator() {
-    int startLine = line;
-    int startColumn = column;
     std::string value;
+    value += advance();
 
     // Handle multi-character operators (e.g., >>, ::)
-    value += advance();
-    if (peek() == '>' || peek() == ':') {
+    if (position < source.length() && ispunct(peek())) {
         value += advance();
     }
 
-    return {TokenType::TOKEN_OPERATOR, value, startLine, startColumn};
+    return Token(TokenType::TOKEN_OPERATOR, value, line, column);
+}
+
+// Get the current position in the source code
+std::pair<int, int> Lexer::getPosition() const {
+    return {line, column};
 }

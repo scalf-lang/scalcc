@@ -1,9 +1,6 @@
 ? examples/hello_world.scl
 ? SCALF "Hello World" program
 
-? Include standard library for system calls
-include > "stdlib"
-
 ? Main function (Automatically called if exists)
 func:Main() {
     ? System call to write to stdout (1 = file descriptor for stdout)

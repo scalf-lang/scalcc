@@ -1,0 +1,47 @@
+? fh.scl
+? Defines the `fh` class for file handling in SCALF
+
+? Include standard library for system calls
+include > "stdlib"
+include > "handle"
+
+? FileHandle class definition
+class:fh {
+    ? Private member: file handle
+    private fileHandle:handle >> null;
+
+    ? Constructor: Opens a file
+    func:Constructor(string:path, string:mode) {
+        handle >> |>open(path, mode);
+    }
+
+    ? Destructor: Closes the file
+    func:Destructor() {
+        if (handle != null) {
+            |>close(handle);
+        }
+    }
+
+    ? Method: Read from the file
+    func:Read(int:size) -> string {
+        return |>read(handle, size);
+    }
+
+    ? Method: Write to the file
+    func:Write(string:data) -> int {
+        return |>write(handle, data);
+    }
+
+    ? Method: Close the file
+    func:Close() {
+        if (handle != null) {
+            |>close(handle);
+            handle >> null;
+        }
+    }
+
+    ? Method: Check if the file is open
+    func:IsOpen() -> bool {
+        return handle != null;
+    }
+}

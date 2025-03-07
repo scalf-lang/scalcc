@@ -1,0 +1,41 @@
+? handle.scl
+? Defines the `handle` base class for resource handling in SCALF
+
+? Include standard library for system calls
+include > "stdlib"
+
+? Handle class definition
+class:handle {
+    ? Protected member: resource handle
+    protected resourceHandle:handle >> null;
+
+    ? Constructor: Initializes the handle to null
+    func:Constructor() {
+        handle >> null;
+    }
+
+    ? Destructor: Releases the resource if it's still active
+    func:Destructor() {
+        if (handle != null) {
+            Release();
+        }
+    }
+
+    ? Method: Release the resource
+    func:Release() {
+        if (handle != null) {
+            ? Default behavior: Set handle to null
+            handle >> null;
+        }
+    }
+
+    ? Method: Check if the resource is active
+    func:IsActive() -> bool {
+        return handle != null;
+    }
+
+    ? Method: Get the raw handle (for low-level operations)
+    func:GetRawHandle() -> resourceHandle {
+        return handle;
+    }
+}

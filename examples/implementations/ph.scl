@@ -1,0 +1,47 @@
+? ph.scl
+? Defines the `ph` class for process handling in SCALF
+
+? Include standard library for system calls
+include > "stdlib"
+include > "handle"
+
+? ProcessHandle class definition
+class:ph {
+    ? Private member: process handle
+    private processHandle:handle >> null;
+
+    ? Constructor: Creates a new process
+    func:Constructor(string:command, string[]:args) {
+        handle >> &create(command, args);
+    }
+
+    ? Destructor: Kills the process if it's still running
+    func:Destructor() {
+        if (handle != null) {
+            &kill(handle);
+        }
+    }
+
+    ? Method: Wait for the process to complete
+    func:Wait() -> int {
+        if (handle != null) {
+            int:exitCode >> &wait(handle);
+            handle >> null; ? Reset handle after process completes
+            return exitCode;
+        }
+        return -1; ? Return -1 if no process is running
+    }
+
+    ? Method: Kill the process
+    func:Kill() {
+        if (handle != null) {
+            &kill(handle);
+            handle >> null; ? Reset handle after killing the process
+        }
+    }
+
+    ? Method: Check if the process is running
+    func:IsRunning() -> bool {
+        return handle != null;
+    }
+}

@@ -1,9 +1,6 @@
 ? examples/process_demo.scl
 ? SCALF Process Management Demo
 
-? Include standard library for system calls
-include > "stdlib"
-
 ? Function to demonstrate process management
 func:ProcessDemo() {
     ? Create a new process (e.g., run "ls" command)

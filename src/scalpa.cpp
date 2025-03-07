@@ -1,4 +1,4 @@
-#include "scalpa.hh"
+#include "scalpa.h"
 #include <stdexcept>
 
 // Constructor
@@ -13,7 +13,7 @@ std::unique_ptr<ProgramNode> Parser::parse() {
 
     while (currentToken.type != TokenType::TOKEN_EOF) {
         if (currentToken.type == TokenType::TOKEN_KEYWORD && currentToken.value == "func") {
-            program->statements.push_back(parseFunctionDefinition());
+            program->addStatement(parseFunctionDefinition());
         } else {
             throw std::runtime_error("Unexpected token: " + currentToken.value);
         }
@@ -22,7 +22,7 @@ std::unique_ptr<ProgramNode> Parser::parse() {
     return program;
 }
 
-// Consume a token of the expected type
+// Helper: Consume a token of the expected type
 void Parser::eat(TokenType type) {
     if (currentToken.type == type) {
         currentToken = lexer.getNextToken();
@@ -31,25 +31,35 @@ void Parser::eat(TokenType type) {
     }
 }
 
-// Peek at the next token without consuming it
+// Helper: Peek at the next token
 Token Parser::peekNextToken() {
-    Lexer tempLexer = lexer; // Copy the lexer to avoid modifying the original
+    Lexer tempLexer = lexer;
     return tempLexer.getNextToken();
 }
 
 // Parse a function definition
 std::unique_ptr<StmtNode> Parser::parseFunctionDefinition() {
     eat(TokenType::TOKEN_KEYWORD); // func
-    eat(TokenType::TOKEN_OPERATOR); // :
-    eat(TokenType::TOKEN_IDENTIFIER); // Function name
+
+    std::string funcName = currentToken.value;
+    eat(TokenType::TOKEN_IDENTIFIER);
+
     eat(TokenType::TOKEN_SYMBOL); // (
-    // Parse parameters
+    // Parse parameters (if any)
     eat(TokenType::TOKEN_SYMBOL); // )
+
     eat(TokenType::TOKEN_OPERATOR); // ->
-    eat(TokenType::TOKEN_IDENTIFIER); // Return type
+    std::string returnType = currentToken.value;
+    eat(TokenType::TOKEN_IDENTIFIER);
+
     eat(TokenType::TOKEN_SYMBOL); // {
+
     // Parse function body
+    while (currentToken.type != TokenType::TOKEN_SYMBOL || currentToken.value != "}") {
+        // Parse statements
+    }
+
     eat(TokenType::TOKEN_SYMBOL); // }
 
-    return std::make_unique<StmtNode>(); // Placeholder
+    return std::make_unique<FunctionDefinitionNode>(funcName, returnType);
 }

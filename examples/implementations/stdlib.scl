@@ -1,0 +1,131 @@
+? stdlib.scl
+? Standard Library for SCALF
+
+? System Calls
+func:|\>syscall(int:callNum, :args) -> int {
+    ? Perform a direct system call
+    return 0; ? Placeholder
+}
+
+? Memory Management
+func:^(int:size) -> pointer {
+    ? Allocate 'size' bytes and return a memory pointer
+    return null; ? Placeholder
+}
+
+func:~\!(pointer:ptr) {
+    ? Free allocated memory at pointer 'ptr'
+}
+
+? File System
+func:|\>open(string:path, string:mode) -> fileHandle {
+    ? Open a file with the specified mode ("r", "w", "rw")
+    return null; ? Placeholder
+}
+
+func:|\>read(fileHandle:handle, int:size) -> string {
+    ? Read 'size' bytes from the file
+    return ""; ? Placeholder
+}
+
+func:|\>write(fileHandle:handle, string:data) -> int {
+    ? Write data to the file, returning bytes written
+    return 0; ? Placeholder
+}
+
+func:|\>close(fileHandle:handle) {
+    ? Close the specified file
+}
+
+? Process Management
+func:\&create(string:command, string[]:args) -> processHandle {
+    ? Start a new process
+    return null; ? Placeholder
+}
+
+func:\&wait(processHandle:handle) -> int {
+    ? Wait for the process to finish and return exit code
+    return 0; ? Placeholder
+}
+
+func:\&kill(processHandle:handle) {
+    ? Terminate the process
+}
+
+? Threading
+func:\&thread(func:entryPoint, :args) -> threadHandle {
+    ? Create a new thread
+    return null; ? Placeholder
+}
+
+func:\&join(threadHandle:handle) {
+    ? Wait for a thread to finish
+}
+
+func:\&killThread(threadHandle:handle) {
+    ? Terminate a thread
+}
+
+? Interrupt Handling
+func:|\>int(int:interruptNum, :params) -> int {
+    ? Call an interrupt with parameters
+    return 0; ? Placeholder
+}
+
+func:@register(int:interruptNum, func:handler) {
+    ? Register a function to handle a specific interrupt
+}
+
+? Utility Functions
+func:ToString(:value) -> string {
+    ? Convert a value to a string
+    return ""; ? Placeholder
+}
+
+func:ToInt(string:str) -> int {
+    ? Convert a string to an integer
+    return 0; ? Placeholder
+}
+
+func:Concat(string:str1, string:str2) -> string {
+    ? Concatenate two strings
+    return str1 + str2;
+}
+
+func:Length(string:str) -> int {
+    ? Return the length of a string
+    return 0; ? Placeholder
+}
+
+func:Substring(string:str, int:start, int:length) -> string {
+    ? Return a substring of 'str' starting at 'start' with 'length'
+    return ""; ? Placeholder
+}
+
+? Error Handling
+func:ThrowError(string:message) {
+    |>syscall(1, "Error: " + message);
+    |>syscall(60, 1); ? Exit with code 1
+}
+
+? Math Functions
+func:Abs(int:num) -> int {
+    ? Return the absolute value of 'num'
+    return num < 0 ? -num : num;
+}
+
+func:Max(int:a, int:b) -> int {
+    ? Return the maximum of two numbers
+    return a > b ? a : b;
+}
+
+func:Min(int:a, int:b) -> int {
+    ? Return the minimum of two numbers
+    return a < b ? a : b;
+}
+
+? Random Number Generation
+func:Random(int:min, int:max) -> int {
+    ? Return a random number between 'min' and 'max'
+    return min; ? Placeholder
+}
