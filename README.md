@@ -1,2 +1,2 @@
 # scalcc
-SCALF compiler written in C. (non-bootstrapped version)
+SCALF interpreter written in C++. (non-bootstrapped version)
