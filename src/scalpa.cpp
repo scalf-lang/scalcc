@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "scalpa.hh"
 #include <stdexcept>
 
 // Constructor

@@ -1,7 +1,7 @@
 #ifndef SCALCC_PARSER_H
 #define SCALCC_PARSER_H
 
-#include "lexer.h"
+#include "scalex.hh"
 #include <memory>
 #include <vector>
 

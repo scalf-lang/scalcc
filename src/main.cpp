@@ -4,10 +4,10 @@
 #include <string>
 #include <memory>
 
-#include "lexer.h"
-#include "parser.h"
-#include "sema/SemanticAnalyzer.h"
-#include "codegen/CodeGenerator.h"
+#include "scalex.hh"
+#include "scalpa.hh"
+#include "scalmantic.hh"
+#include "scalgen.hh"
 #include "llvm/Support/raw_ostream.h"
 
 // Function to read a file into a string
