@@ -1,9 +1,8 @@
-#ifndef SCALCC_LEXER_H
-#define SCALCC_LEXER_H
+#ifndef SCALEX_H
+#define SCALEX_H
 
 #include <string>
 #include <vector>
-#include <utility>
 
 // Token types for SCALF
 enum class TokenType {
@@ -30,9 +29,9 @@ struct Token {
 };
 
 // Lexer class
-class Lexer {
+class Scalex {
 public:
-    explicit Lexer(const std::string& source);
+    explicit Scalex(const std::string& source);
 
     // Get the next token
     Token getNextToken();
@@ -57,4 +56,4 @@ private:
     Token readOperator();
 };
 
-#endif // SCALCC_LEXER_H
+#endif // SCALEX_H

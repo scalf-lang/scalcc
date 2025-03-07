@@ -1,13 +1,13 @@
-#include "scalex.hh"
+#include "scalex.h"
 #include <cctype>
 #include <utility>
 
 // Constructor
-Lexer::Lexer(const std::string& source)
+Scalex::Scalex(const std::string& source)
     : source(source), position(0), line(1), column(1) {}
 
 // Get the next token
-Token Lexer::getNextToken() {
+Token Scalex::getNextToken() {
     skipWhitespace();
     skipComment();
 
@@ -18,7 +18,7 @@ Token Lexer::getNextToken() {
     char currentChar = peek();
 
     // Handle identifiers and keywords
-    if (isalpha(currentChar) {
+    if (isalpha(currentChar)) {
         return readIdentifier();
     }
 
@@ -42,12 +42,12 @@ Token Lexer::getNextToken() {
 }
 
 // Helper: Peek at the current character
-char Lexer::peek() const {
+char Scalex::peek() const {
     return source[position];
 }
 
 // Helper: Advance to the next character
-char Lexer::advance() {
+char Scalex::advance() {
     char currentChar = source[position++];
     if (currentChar == '\n') {
         line++;
@@ -59,14 +59,14 @@ char Lexer::advance() {
 }
 
 // Helper: Skip whitespace
-void Lexer::skipWhitespace() {
+void Scalex::skipWhitespace() {
     while (position < source.length() && isspace(peek())) {
         advance();
     }
 }
 
 // Helper: Skip comments
-void Lexer::skipComment() {
+void Scalex::skipComment() {
     if (peek() == '?') {
         if (position + 1 < source.length() && source[position + 1] == '/') {
             // Multiline comment
@@ -85,7 +85,7 @@ void Lexer::skipComment() {
 }
 
 // Helper: Read an identifier or keyword
-Token Lexer::readIdentifier() {
+Token Scalex::readIdentifier() {
     std::string value;
     while (position < source.length() && (isalnum(peek()) || peek() == '_')) {
         value += advance();
@@ -100,7 +100,7 @@ Token Lexer::readIdentifier() {
 }
 
 // Helper: Read a number
-Token Lexer::readNumber() {
+Token Scalex::readNumber() {
     std::string value;
     while (position < source.length() && isdigit(peek())) {
         value += advance();
@@ -109,7 +109,7 @@ Token Lexer::readNumber() {
 }
 
 // Helper: Read a string
-Token Lexer::readString() {
+Token Scalex::readString() {
     std::string value;
     advance(); // Skip opening quote
     while (position < source.length() && peek() != '"') {
@@ -120,7 +120,7 @@ Token Lexer::readString() {
 }
 
 // Helper: Read an operator or symbol
-Token Lexer::readOperator() {
+Token Scalex::readOperator() {
     std::string value;
     value += advance();
 
@@ -133,6 +133,6 @@ Token Lexer::readOperator() {
 }
 
 // Get the current position in the source code
-std::pair<int, int> Lexer::getPosition() const {
+std::pair<int, int> Scalex::getPosition() const {
     return {line, column};
 }

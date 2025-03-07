@@ -2,13 +2,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <memory>
-
-#include "scalex.hh"
-#include "scalpa.hh"
-#include "scalmantic.hh"
-#include "scalgen.hh"
-#include "llvm/Support/raw_ostream.h"
+#include "scalex/scalex.h"
+#include "scalpa/scalpa.h"
+#include "interpreter/scalpreter.h"
 
 // Function to read a file into a string
 std::string readFile(const std::string& filename) {
@@ -25,7 +21,7 @@ std::string readFile(const std::string& filename) {
 int main(int argc, char** argv) {
     // Check command-line arguments
     if (argc < 2) {
-        std::cerr << "Usage: scalcc <input-file.scl> [-o <output-file>]" << std::endl;
+        std::cerr << "Usage: scalcc <input-file.scl>" << std::endl;
         return 1;
     }
 
@@ -33,36 +29,16 @@ int main(int argc, char** argv) {
     std::string inputFile = argv[1];
     std::string sourceCode = readFile(inputFile);
 
-    // Initialize the lexer and parser
-    Lexer lexer(sourceCode);
-    Parser parser(lexer);
+    // Tokenize the input
+    Scalex lexer(sourceCode);
 
-    // Parse the input file into an AST
-    std::unique_ptr<ASTNode> ast = parser.parse();
+    // Parse the tokens into an AST
+    Scalpa parser(lexer);
+    std::unique_ptr<ProgramNode> ast = parser.parse();
 
-    // Perform semantic analysis
-    SemanticAnalyzer sema;
-    sema.analyze(ast.get());
-
-    // Generate LLVM IR
-    CodeGenerator codegen;
-    codegen.generate(ast.get());
-
-    // Output the generated IR
-    std::string outputFile = "output.ll";
-    if (argc > 2 && std::string(argv[2]) == "-o") {
-        outputFile = argv[3];
-    }
-
-    std::error_code EC;
-    llvm::raw_fd_ostream outLLVM(outputFile, EC);
-    if (EC) {
-        std::cerr << "Error: Could not open output file " << outputFile << std::endl;
-        return 1;
-    }
-
-    codegen.getModule().print(outLLVM, nullptr);
-    std::cout << "Compilation successful. Output written to " << outputFile << std::endl;
+    // Interpret the AST
+    Scalpreter interpreter;
+    interpreter.interpret(ast.get());
 
     return 0;
 }

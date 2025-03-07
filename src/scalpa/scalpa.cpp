@@ -2,13 +2,13 @@
 #include <stdexcept>
 
 // Constructor
-Parser::Parser(Lexer& lexer)
+Scalpa::Scalpa(Scalex& lexer)
     : lexer(lexer) {
     currentToken = lexer.getNextToken();
 }
 
 // Parse the entire program
-std::unique_ptr<ProgramNode> Parser::parse() {
+std::unique_ptr<ProgramNode> Scalpa::parse() {
     auto program = std::make_unique<ProgramNode>();
 
     while (currentToken.type != TokenType::TOKEN_EOF) {
@@ -23,7 +23,7 @@ std::unique_ptr<ProgramNode> Parser::parse() {
 }
 
 // Helper: Consume a token of the expected type
-void Parser::eat(TokenType type) {
+void Scalpa::eat(TokenType type) {
     if (currentToken.type == type) {
         currentToken = lexer.getNextToken();
     } else {
@@ -32,13 +32,13 @@ void Parser::eat(TokenType type) {
 }
 
 // Helper: Peek at the next token
-Token Parser::peekNextToken() {
-    Lexer tempLexer = lexer;
+Token Scalpa::peekNextToken() {
+    Scalex tempLexer = lexer;
     return tempLexer.getNextToken();
 }
 
 // Parse a function definition
-std::unique_ptr<StmtNode> Parser::parseFunctionDefinition() {
+std::unique_ptr<StmtNode> Scalpa::parseFunctionDefinition() {
     eat(TokenType::TOKEN_KEYWORD); // func
 
     std::string funcName = currentToken.value;
